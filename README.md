@@ -1,127 +1,145 @@
-# FinAware – Personal Financial Planning and Analysis Platform 💰
+# Smart Personal Finance Tracker
 
-FinAware is a secure web-based personal finance management system designed to help users track income, manage expenses, and improve saving habits.
-The platform provides automated financial calculations, graphical dashboards, and intelligent savings suggestions to help students and first-time earners understand their financial behavior.
+## Overview
 
----
+Smart Personal Finance Tracker is a web-based application designed to help users manage their finances effectively. The system allows users to plan budgets, track daily expenses, and receive intelligent financial insights based on their spending patterns.
 
-## 📌 Project Objective
-
-The main objective of FinAware is to improve financial awareness and budgeting discipline by providing a simple and interactive financial planning platform.
-Unlike traditional budgeting methods (notebooks or spreadsheets), the system automatically analyzes spending patterns and presents insights visually.
+The application is primarily designed for students and early professionals (ages 18–30) who are beginning to manage their own income and expenses.
 
 ---
 
-## ✨ Key Features
+## Features
 
-* User Registration & Secure Login
-* Monthly Budget Planning
-* Fixed & Variable Expense Tracking
-* Automatic Financial Calculations
-* Savings Goal Monitoring
-* Interactive Financial Dashboard
-* Smart Savings Suggestions (based on user profile)
-* Persistent Cloud Data Storage
-* Help & Support Section
+### 1. Budget Planner
+- Create a monthly budget based on income
+- Add fixed and variable expenses
+- Set savings goals using a slider
+- Visualize budget distribution using charts
+- Automatically calculates remaining balance
 
----
+### 2. Daily Expense Tracker
+- Track expenses on a daily basis
+- Categorize expenses automatically using AI-based logic
+- View expenses grouped by date and category
+- Delete and manage entries easily
+- Supports voice input for adding expenses
+- Displays category-wise spending vs budget
 
-## 🧠 System Modules
+### 3. Smart Saving Suggestions
+- Provides personalized financial suggestions
+- Analyzes real user budget data
+- Detects highest spending category automatically
+- Allows users to select financial goals:
+  - Reduce spending
+  - Increase savings
+  - Control budget
+- Generates actionable insights based on spending patterns
+- Combines profile-based and budget-based suggestions
 
-1. Authentication Module
-2. Budget Planning Module
-3. Dashboard Analysis Module
-4. Smart Savings Recommendation Module
-5. Data Storage Module
+### 4. Dashboard
+- Displays monthly financial summary
+- Shows income, expenses, and savings
+- Stores and retrieves previous budget plans
 
----
-
-## 🛠 Technology Stack
-
-**Frontend**
-
-* React (Vite + TypeScript)
-* Tailwind CSS
-* shadcn/ui Components
-
-**Backend & Database**
-
-* Supabase Cloud Database
-* Authentication Services
-
-**Other Tools**
-
-* GitHub (Version Control)
-* VS Code (Development)
-* Loveable Platform (UI Development)
+### 5. User Personalization
+- Save user name locally
+- Customize suggestions based on:
+  - Age group
+  - Profession
 
 ---
 
-## ⚙️ Installation & Running Locally
+## Tech Stack
 
-### Prerequisites
+### Frontend
+- React 18
+- TypeScript
+- Vite
 
-* Node.js (v18 or above)
-* npm
+### Styling
+- Tailwind CSS
+- shadcn/ui components
 
-### Steps
+### State Management
+- React Hooks
 
-```bash
-# Clone repository
-git clone <your-github-repo-link>
+### Data Storage
+- LocalStorage (for persistence)
 
-# Open project folder
-cd <project-folder-name>
+### Charts and Visualization
+- Recharts
 
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-```
-
-Then open:
-http://localhost:5173
-
----
-
-## 📊 System Workflow
-
-1. User creates an account
-2. User logs in securely
-3. User enters monthly income
-4. User adds fixed and variable expenses
-5. System calculates totals and savings automatically
-6. Dashboard visualizes financial data
-7. Smart module provides saving suggestions
+### AI Logic
+- Rule-based intelligent system for:
+  - Expense categorization
+  - Financial insights
+  - Smart suggestions
 
 ---
 
-## 📷 Screenshots
-<img width="806" height="997" alt="image" src="https://github.com/user-attachments/assets/0f35fdad-b090-4d5e-8a51-6229c3896da6" />
-<img width="940" height="485" alt="image" src="https://github.com/user-attachments/assets/f75efb89-fbab-49b2-8062-4c80e6432078" />
-<img width="940" height="489" alt="image" src="https://github.com/user-attachments/assets/a90ab744-98c6-4220-a0f0-cfab654a9ca0" />
-<img width="940" height="653" alt="image" src="https://github.com/user-attachments/assets/93d56fbb-a5f2-4e8d-be09-009195e16993" />
-<img width="940" height="498" alt="image" src="https://github.com/user-attachments/assets/17ed1f59-2a59-470e-81df-988f0df0db65" />
-
-
-## 🎯 Future Enhancements
-
-* Bank API integration for automatic transaction import
-* AI-based expense prediction
-* Mobile application
-* Investment portfolio tracking
-* Notification and bill reminders
+## Project Structure
+src/
+│
+├── components/
+│ ├── BudgetForm.tsx
+│ ├── BudgetChart.tsx
+│ ├── Navbar.tsx
+│ ├── SuggestionCard.tsx
+│
+├── pages/
+│ ├── Dashboard.tsx
+│ ├── SmartSavingSuggestions.tsx
+│ ├── DailyTracker.tsx
+│
+├── utils/
+│ ├── aiSuggestions.ts
+│ ├── savingsSuggestions.ts
+│
+├── services/
+│ ├── aiServices.ts
 
 ---
 
-## 👨‍🎓 Developed By
+## How It Works
 
-**Kavyashi Trar**
-**Daksh Gupta**
+1. User enters income and expenses in the Budget Planner
+2. Data is stored in localStorage
+3. Daily expenses are tracked and categorized
+4. Smart Suggestions module:
+   - Reads stored budget data
+   - Calculates category-wise spending
+   - Detects highest expense category
+   - Generates insights and recommendations
 
-Bachelor of Technology – Computer Science & Engineering
-Manipal University Jaipur (2025–2026)
+---
+
+## Installation and Setup
+
+1. Clone the repository
+   git clone https://github.com/Kavyashitrar17/Budget_flow.git
+2. Navigate to project directory
+   cd project-folder
+3. Install dependencies
+   npm install
+4. Run the development server
+   npm run dev
+
+---
+
+## Future Enhancements
+
+- Integration with real AI/ML models
+- Backend support with database
+- User authentication system
+- Expense analytics with graphs
+- Weekly and monthly financial reports
+- Notifications for overspending
+
+---
+
+## Conclusion
+
+This project demonstrates a complete personal finance management system with intelligent suggestions and real-time tracking. It focuses on solving real-world financial problems for young individuals entering financial independence.
 
 ---
 
