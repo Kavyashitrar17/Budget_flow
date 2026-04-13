@@ -181,7 +181,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
     <Card className="max-w-5xl mx-auto shadow-md border-0">
       <CardHeader>
         <CardTitle className="text-xl font-semibold">
-          💰 Monthly Budget Planner
+           Monthly Budget Planner
         </CardTitle>
       </CardHeader>
 
@@ -201,7 +201,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
             />
             <Button
               size="icon"
-              className="h-10 w-10 bg-purple-500 hover:bg-purple-600 text-white"
+              className="h-10 w-10 bg-purple-400 hover:bg-purple-500 text-white"
               onClick={() =>
                 startVoice((text) => {
                   const num = text.replace(/\D/g, "");
@@ -217,12 +217,12 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
         {/* fixed */}
         <div className="bg-white border rounded-lg p-4 shadow-sm">
           <div className="flex justify-between items-center mb-2">
-            <Label className="font-medium">💸 Fixed Expenses</Label>
+            <Label className="font-medium"> Fixed Expenses</Label>
 
             <div className="flex gap-2">
               <Button
                 size="icon"
-                className="h-10 w-10 bg-purple-500 text-white"
+                className="h-10 w-10 bg-purple-400 text-white"
                 onClick={() =>
                   startVoice(async (text) => {
                     const parts = text.trim().split(" ");
@@ -250,7 +250,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
 
               <Button
                 size="icon"
-                className="h-10 w-10 bg-purple-500 text-white"
+                className="h-10 w-10 bg-purple-400 text-white"
                 onClick={() => addItem("fixed")}
               >
                 <Plus size={16} />
@@ -311,12 +311,12 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
         {/* variable */}
         <div className="bg-white border rounded-lg p-4 shadow-sm">
           <div className="flex justify-between items-center mb-2">
-            <Label className="font-medium">📊 Variable Expenses</Label>
+            <Label className="font-medium">Variable Expenses</Label>
 
             <div className="flex gap-2">
               <Button
                 size="icon"
-                className="h-10 w-10 bg-purple-500 text-white"
+                className="h-10 w-10 bg-purple-400 text-white"
                 onClick={() =>
                   startVoice(async (text) => {
                     const parts = text.trim().split(" ");
@@ -352,7 +352,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
 
               <Button
                 size="icon"
-                className="h-10 w-10 bg-purple-500 text-white"
+                className="h-10 w-10 bg-purple-400 text-white"
                 onClick={() => addItem("variable")}
               >
                 <Plus size={16} />

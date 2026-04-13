@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, BarChart2, Lightbulb, HelpCircle, LogOut, User } from 'lucide-react';
+import { Home, BarChart2, Lightbulb, HelpCircle, LogOut, User, BarChart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
@@ -52,7 +52,7 @@ const Navbar = () => {
       });
     }
   };
-  
+  const [open, setOpen] = useState(false);
   return (
     <nav className="w-full bg-card shadow-sm z-10 border-b">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
@@ -112,43 +112,65 @@ const Navbar = () => {
               location.pathname === "/help" ? "bg-muted text-primary" : ""
             )}
           >
-            <Link to="/help" className="flex items-center">
-              <HelpCircle className="h-4 w-4 mr-2" />
-              <span>Help</span>
-            </Link>
+            
           </Button>
-          <Link to="/tracker">Tracker</Link>
+          <Button
+  variant="ghost"
+  size="sm"
+  asChild
+  className={cn(
+    "flex items-center",
+    location.pathname === "/tracker" ? "bg-muted text-primary" : ""
+  )}
+>
+  <Link to="/tracker" className="flex items-center">
+    <HelpCircle className="h-4 w-4 mr-2" />
+    <span>Tracker</span>
+  </Link>
+</Button>
           {user ? (
-            <div className="flex items-center space-x-2 ml-2 pl-2 border-l">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="flex items-center"
-              >
-                <User className="h-4 w-4 mr-2" />
-                <span className="hidden md:inline">{user.email}</span>
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleLogout}
-                className="flex items-center"
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                <span>Logout</span>
-              </Button>
-            </div>
-          ) : (
-            <div className="ml-2 pl-2 border-l">
-              <Button
-                variant="default"
-                size="sm"
-                asChild
-              >
-                <Link to="/auth">Login</Link>
-              </Button>
-            </div>
-          )}
+  <div className="relative ml-2 pl-2 border-l">
+    
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => setOpen(!open)}
+      className="flex items-center"
+    >
+      <User className="h-4 w-4 mr-2" />
+      <span className="hidden md:inline">{user.email}</span>
+    </Button>
+
+    {open && (
+      <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-50">
+        
+        <button
+          onClick={() => {
+            navigate("/help");
+            setOpen(false);
+          }}
+          className="w-full text-left px-4 py-2 hover:bg-gray-100"
+        >
+          Help
+        </button>
+
+        <button
+          onClick={handleLogout}
+          className="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100"
+        >
+          Logout
+        </button>
+
+      </div>
+    )}
+  </div>
+) : (
+  <div className="ml-2 pl-2 border-l">
+    <Button variant="default" size="sm" asChild>
+      <Link to="/auth">Login</Link>
+    </Button>
+  </div>
+)}
         </div>
       </div>
     </nav>

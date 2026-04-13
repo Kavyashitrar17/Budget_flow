@@ -222,15 +222,15 @@ const generateInsights = () => {
 
     if (percent > 100) {
       insights.push(
-        `⚠️ You exceeded ${category} budget by ₹${spent - budgetAmt}`
+        ` You exceeded ${category} budget by ₹${spent - budgetAmt}`
       );
     } else if (percent > 70) {
       insights.push(
-        `⚠️ You used ${percent.toFixed(0)}% of ${category} budget`
+        ` You used ${percent.toFixed(0)}% of ${category} budget`
       );
     } else if (percent < 40) {
       insights.push(
-        `💡 You are saving well in ${category}`
+        ` You are saving well in ${category}`
       );
     }
   });
@@ -242,9 +242,9 @@ const generateInsights = () => {
     const savings = budget.monthlyIncome - totalSpent;
 
     if (savings < 0) {
-      insights.push(`🚨 You are overspending overall`);
+      insights.push(` You are overspending overall`);
     } else if (savings > budget.monthlyIncome * 0.2) {
-      insights.push(`🔥 Great savings this month!`);
+      insights.push(` Great savings this month!`);
     }
   }
 
@@ -269,7 +269,7 @@ const insights = generateInsights();
 
   <button
     onClick={handleAdd}
-    className="bg-purple-600 text-white px-4"
+    className="bg-purple-500 text-white px-4"
   >
     Add
   </button>
@@ -277,7 +277,7 @@ const insights = generateInsights();
   {/* 🎤 VOICE */}
   <button
     onClick={startVoiceInput}
-    className="bg-green-500 text-white px-4"
+    className="bg-purple-500 text-white px-4"
   >
     🎤
   </button>
@@ -286,7 +286,7 @@ const insights = generateInsights();
 {/* 📥 DOWNLOAD BUTTON */}
 <button
   onClick={downloadReport}
-  className="bg-blue-500 text-white px-4 py-2 mb-4"
+  className="bg-purple-500 text-white px-4 py-2 mb-4"
 >
   Download Report
 </button>
