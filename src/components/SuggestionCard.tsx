@@ -1,5 +1,4 @@
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PiggyBank, Lightbulb, TrendingUp } from 'lucide-react';
 
 type SuggestionProps = {
@@ -9,37 +8,48 @@ type SuggestionProps = {
   gradientClass?: string;
 };
 
-const SuggestionCard = ({ 
-  title, 
-  description, 
+const SuggestionCard = ({
+  title,
+  description,
   icon = 'bulb',
-  gradientClass = 'from-blue-50 to-green-50' 
+  gradientClass = 'from-blue-50 to-green-50',
 }: SuggestionProps) => {
+
   const renderIcon = () => {
     switch (icon) {
       case 'piggy':
-        return <PiggyBank className="h-6 w-6 text-primary" />;
+        return <PiggyBank className="h-5 w-5 text-green-600" />;
       case 'trend':
-        return <TrendingUp className="h-6 w-6 text-primary" />;
-      case 'bulb':
+        return <TrendingUp className="h-5 w-5 text-blue-600" />;
       default:
-        return <Lightbulb className="h-6 w-6 text-primary" />;
+        return <Lightbulb className="h-5 w-5 text-yellow-500" />;
     }
   };
 
   return (
-    <Card className={`overflow-hidden border shadow-sm hover:shadow-md transition-all duration-300 animate-fade-in bg-gradient-to-br ${gradientClass}`}>
-      <CardHeader className="flex flex-row items-center gap-4 pb-2">
-        <div className="bg-primary/10 p-2 rounded-full">
+    <Card className={`group border shadow-sm hover:shadow-lg transition-all duration-300 bg-gradient-to-br ${gradientClass}`}>
+      
+      <CardHeader className="flex flex-row items-center gap-3 pb-2">
+        
+        {/* ICON */}
+        <div className="p-2 rounded-full bg-white shadow-sm group-hover:scale-110 transition">
           {renderIcon()}
         </div>
-        <CardTitle className="text-lg text-primary">{title}</CardTitle>
+
+        {/* TITLE */}
+        <CardTitle className="text-base font-semibold">
+          {title}
+        </CardTitle>
+
       </CardHeader>
+
       <CardContent>
-        <CardDescription className="text-sm text-gray-600">
+        {/* DESCRIPTION */}
+        <p className="text-sm text-muted-foreground leading-relaxed">
           {description}
-        </CardDescription>
+        </p>
       </CardContent>
+
     </Card>
   );
 };

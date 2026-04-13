@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import Navbar from '@/components/Navbar';
@@ -6,202 +5,240 @@ import SuggestionCard from '@/components/SuggestionCard';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Lightbulb, BrainCircuit, MoonStar, Sun } from 'lucide-react';
+import { Lightbulb, BrainCircuit, TrendingUp } from 'lucide-react';
 import { AgeRange, Profession, getSuggestionsByAgeAndProfession, getRandomNotification } from '@/utils/savingsSuggestions';
 
+type BudgetData = {
+  monthlyIncome: number;
+  fixedExpenses: { name: string; amount: number; category: string }[];
+  variableExpenses: { name: string; amount: number; category: string }[];
+  savingsGoal: number;
+};
+
+type Suggestion = {
+  title: string;
+  description: string;
+  icon: 'piggy' | 'bulb' | 'trend';
+  gradientClass: string;
+};
+
+type GoalType = "reduce" | "save" | "control";
+
+// 🔥 AI ENGINE (UPGRADED)
+const getSuggestionsFromBudget = (
+  budget: BudgetData,
+  goal: GoalType
+): { suggestions: Suggestion[]; insight: string } => {
+
+  const { monthlyIncome, fixedExpenses, variableExpenses } = budget;
+  const all = [...fixedExpenses, ...variableExpenses];
+
+  const totalExpenses = all.reduce((sum, e) => sum + e.amount, 0);
+
+  const pct = (amount: number) =>
+    monthlyIncome > 0 ? Math.round((amount / monthlyIncome) * 100) : 0;
+
+  const categoryTotal = (keywords: string[]) =>
+    all
+      .filter((e) =>
+        keywords.some(
+          (k) =>
+            e.category?.toLowerCase().includes(k) ||
+            e.name?.toLowerCase().includes(k)
+        )
+      )
+      .reduce((sum, e) => sum + e.amount, 0);
+
+  const food = categoryTotal(["food", "pizza", "restaurant"]);
+  const transport = categoryTotal(["transport", "uber", "fuel"]);
+  const entertainment = categoryTotal(["entertainment", "netflix", "movie"]);
+
+  const categories = [
+    { name: "Food", amount: food },
+    { name: "Transport", amount: transport },
+    { name: "Entertainment", amount: entertainment },
+  ];
+
+  const top = categories.reduce((a, b) => (a.amount > b.amount ? a : b));
+
+  const percent = pct(top.amount);
+  const potentialSaving = Math.round(top.amount * 0.3);
+
+  // 🔥 INSIGHT (UPGRADED)
+  const insight = monthlyIncome === 0
+    ? "Add your income in Budget Planner to unlock insights."
+    : `⚠️ You are spending ₹${top.amount} (${percent}%) on ${top.name}. You can save approx ₹${potentialSaving}/month by optimizing this category.`;
+
+  const suggestions: Suggestion[] = [];
+
+  // 🔥 GOAL BASED LOGIC
+  if (goal === "reduce") {
+    suggestions.push({
+      title: `Reduce ${top.name} Spending`,
+      description: `Cut down unnecessary ${top.name.toLowerCase()} expenses to save ₹${potentialSaving}/month.`,
+      icon: "bulb",
+      gradientClass: "from-rose-50 to-orange-50",
+    });
+  }
+
+  if (goal === "save") {
+    suggestions.push({
+      title: "Increase Savings",
+      description: "Try 50/30/20 rule and automate savings.",
+      icon: "trend",
+      gradientClass: "from-green-50 to-emerald-50",
+    });
+  }
+
+  if (goal === "control") {
+    suggestions.push({
+      title: "Control Spending",
+      description: "Set strict category limits and track weekly.",
+      icon: "trend",
+      gradientClass: "from-blue-50 to-cyan-50",
+    });
+  }
+
+  // Common suggestions
+  suggestions.push(
+    {
+      title: "Weekly Budgeting",
+      description: "Divide your expenses weekly to track better.",
+      icon: "bulb",
+      gradientClass: "from-yellow-50 to-orange-50",
+    },
+    {
+      title: "Emergency Fund",
+      description: "Save 3–6 months of expenses for safety.",
+      icon: "piggy",
+      gradientClass: "from-green-50 to-teal-50",
+    }
+  );
+
+  return { suggestions, insight };
+};
+
 const SmartSavingSuggestions = () => {
-  const [ageRange, setAgeRange] = useState<AgeRange>('26-35');
-  const [profession, setProfession] = useState<Profession>('Salaried Employee');
-  const [suggestions, setSuggestions] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => {
-    const savedMode = localStorage.getItem('darkMode');
-    return savedMode ? JSON.parse(savedMode) : false;
-  });
   const { toast } = useToast();
 
-  // Save preferences to localStorage
+  const [ageRange, setAgeRange] = useState<AgeRange>('18-25');
+  const [profession, setProfession] = useState<Profession>('Student');
+  const [goal, setGoal] = useState<GoalType>("reduce");
+
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [insight, setInsight] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('savingsPreferences');
+    if (saved) {
+      const { ageRange, profession } = JSON.parse(saved);
+      setAgeRange(ageRange);
+      setProfession(profession);
+    }
+  }, []);
+
   useEffect(() => {
     localStorage.setItem('savingsPreferences', JSON.stringify({ ageRange, profession }));
   }, [ageRange, profession]);
 
-  // Load preferences from localStorage
-  useEffect(() => {
-    const savedPreferences = localStorage.getItem('savingsPreferences');
-    if (savedPreferences) {
-      const { ageRange: savedAge, profession: savedProfession } = JSON.parse(savedPreferences);
-      setAgeRange(savedAge);
-      setProfession(savedProfession);
-    }
-  }, []);
-
-  // Toggle dark mode
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    localStorage.setItem('darkMode', JSON.stringify(darkMode));
-  }, [darkMode]);
-
-  // Show random notification on mount
   useEffect(() => {
     const timer = setTimeout(() => {
-      const notification = getRandomNotification();
-      toast({
-        title: notification.title,
-        description: notification.description,
-      });
+      const n = getRandomNotification();
+      toast({ title: n.title, description: n.description });
     }, 3000);
-
     return () => clearTimeout(timer);
-  }, [toast]);
+  }, []);
 
   const handleGetSuggestions = () => {
     setIsLoading(true);
-    // Simulate AI processing time
+
     setTimeout(() => {
-      const newSuggestions = getSuggestionsByAgeAndProfession(ageRange, profession);
-      setSuggestions(newSuggestions);
+      const profile = getSuggestionsByAgeAndProfession(ageRange, profession);
+
+      let budgetSuggestions: Suggestion[] = [];
+      let insightText = "";
+
+      const raw = localStorage.getItem("currentBudget");
+
+      if (raw) {
+        const budget: BudgetData = JSON.parse(raw);
+        const result = getSuggestionsFromBudget(budget, goal);
+        budgetSuggestions = result.suggestions;
+        insightText = result.insight;
+      }
+
+      setInsight(insightText);
+      setSuggestions([...budgetSuggestions, ...profile].slice(0, 8));
+
       setIsLoading(false);
-    }, 1200);
+    }, 1000);
   };
 
   return (
-    <div className="min-h-screen bg-background transition-colors duration-300">
+    <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       <main className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-primary mb-2 flex items-center">
-              <BrainCircuit className="mr-2 h-8 w-8" />
-              Smart Saving Suggestions
-            </h1>
-            <p className="text-muted-foreground">
-              Personalized financial advice based on your age and profession
-            </p>
-          </div>
-          
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setDarkMode(!darkMode)}
-            className="flex items-center"
-          >
-            {darkMode ? (
-              <>
-                <Sun className="h-4 w-4 mr-2" />
-                Light Mode
-              </>
-            ) : (
-              <>
-                <MoonStar className="h-4 w-4 mr-2" />
-                Dark Mode
-              </>
-            )}
-          </Button>
-        </div>
-        
-        <Card className="mb-8 shadow-md animate-fade-in">
-          <CardHeader>
-            <CardTitle className="text-xl">
-              Tell us about yourself
-            </CardTitle>
-            <CardDescription>
-              We'll provide tailored savings recommendations based on your profile
-            </CardDescription>
-          </CardHeader>
-          
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Age Range</label>
-                <Select value={ageRange} onValueChange={(value) => setAgeRange(value as AgeRange)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your age range" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="18-25">18-25 years</SelectItem>
-                    <SelectItem value="26-35">26-35 years</SelectItem>
-                    <SelectItem value="36-45">36-45 years</SelectItem>
-                    <SelectItem value="46-55">46-55 years</SelectItem>
-                    <SelectItem value="56+">56+ years</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Profession</label>
-                <Select value={profession} onValueChange={(value) => setProfession(value as Profession)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your profession" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Student">Student</SelectItem>
-                    <SelectItem value="Freelancer">Freelancer</SelectItem>
-                    <SelectItem value="Engineer">Engineer</SelectItem>
-                    <SelectItem value="Doctor">Doctor</SelectItem>
-                    <SelectItem value="Business Owner">Business Owner</SelectItem>
-                    <SelectItem value="Salaried Employee">Salaried Employee</SelectItem>
-                    <SelectItem value="Retired">Retired</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            
-            <Button 
-              className="w-full mt-6"
-              onClick={handleGetSuggestions}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <div className="h-4 w-4 mr-2 rounded-full border-2 border-current border-t-transparent animate-spin" />
-                  Analyzing your profile...
-                </>
-              ) : (
-                <>
-                  <Lightbulb className="h-4 w-4 mr-2" />
-                  Get Smart Suggestions
-                </>
-              )}
+
+        <h1 className="text-3xl font-bold flex items-center gap-2 mb-2">
+          <BrainCircuit /> Smart Saving Insights
+        </h1>
+
+        <p className="text-muted-foreground mb-6">
+          AI-powered insights for students & early professionals
+        </p>
+
+        <Card className="mb-6">
+          <CardContent className="grid md:grid-cols-3 gap-4 p-6">
+
+            <Select value={ageRange} onValueChange={(v) => setAgeRange(v as AgeRange)}>
+              <SelectTrigger><SelectValue placeholder="Age" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="18-25">18–25</SelectItem>
+                <SelectItem value="26-35">26–35</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={profession} onValueChange={(v) => setProfession(v as Profession)}>
+              <SelectTrigger><SelectValue placeholder="Profession" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Student">Student</SelectItem>
+                <SelectItem value="Salaried Employee">Employee</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={goal} onValueChange={(v) => setGoal(v as GoalType)}>
+              <SelectTrigger><SelectValue placeholder="Goal" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="reduce"> Reduce Spending</SelectItem>
+                <SelectItem value="save">Increase Savings</SelectItem>
+                <SelectItem value="control"> Control Budget</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Button onClick={handleGetSuggestions} className="col-span-3">
+              {isLoading ? "Analyzing..." : "Get Smart Suggestions"}
             </Button>
+
           </CardContent>
         </Card>
-        
-        {suggestions.length > 0 && (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-semibold flex items-center text-primary">
-              <Lightbulb className="mr-2 h-6 w-6" />
-              Your Personalized Saving Tips
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {suggestions.map((suggestion, index) => (
-                <div 
-                  key={index} 
-                  className={`animate-slide-up delay-${index * 100}`}
-                >
-                  <SuggestionCard 
-                    title={suggestion.title}
-                    description={suggestion.description}
-                    icon={suggestion.icon}
-                    gradientClass={suggestion.gradientClass}
-                  />
-                </div>
-              ))}
-            </div>
-            
-            <div className="bg-accent/50 p-4 rounded-lg mt-8">
-              <p className="text-sm text-accent-foreground">
-                <strong>Note:</strong> These suggestions are based on general financial wisdom for your age group and profession. 
-                For personalized financial advice, please consult with a certified financial advisor.
-              </p>
-            </div>
+
+        {/* 🔥 Insight */}
+        {insight && (
+          <div className="bg-blue-50 border border-blue-200 p-4 rounded mb-6 flex gap-2">
+            <TrendingUp className="text-blue-600" />
+            <p className="text-sm">{insight}</p>
           </div>
         )}
+
+        {/* Suggestions */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {suggestions.map((s, i) => (
+            <SuggestionCard key={i} {...s} />
+          ))}
+        </div>
+
       </main>
     </div>
   );
