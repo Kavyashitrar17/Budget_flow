@@ -80,24 +80,44 @@ The application is primarily designed for students and early professionals (ages
 ## Project Structure
 src/
 │
-├── components/
-│ ├── BudgetForm.tsx
-│ ├── BudgetChart.tsx
-│ ├── Navbar.tsx
-│ ├── SuggestionCard.tsx
+├── components/              
+│   ├── ui/                  
+│   ├── common/              
+│   │   ├── Navbar.tsx
+│   │   ├── SuggestionCard.tsx
 │
-├── pages/
-│ ├── Dashboard.tsx
-│ ├── SmartSavingSuggestions.tsx
-│ ├── DailyTracker.tsx
+├── features/               
+│   ├── budget/
+│   │   ├── BudgetForm.tsx
+│   │   ├── BudgetChart.tsx
+│   │   ├── budgetUtils.ts
 │
-├── utils/
-│ ├── aiSuggestions.ts
-│ ├── savingsSuggestions.ts
+│   ├── tracker/
+│   │   ├── DailyTracker.tsx
+│   │   ├── trackerUtils.ts
 │
-├── services/
-│ ├── aiServices.ts
-
+│   ├── smartSavings/
+│   │   ├── SmartSavingSuggestions.tsx
+│   │   ├── suggestionEngine.ts   
+│
+│   ├── dashboard/
+│   │   ├── Dashboard.tsx
+│
+├── hooks/                   
+│   ├── useLocalStorage.ts
+│
+├── services/                
+│   ├── aiServices.ts
+│
+├── utils/                 
+│   ├── format.ts
+│
+├── types/                  
+│   ├── budget.ts
+│   ├── suggestion.ts
+│
+├── App.tsx
+├── main.tsx
 ---
 
 ## How It Works
