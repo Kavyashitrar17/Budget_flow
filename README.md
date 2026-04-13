@@ -78,43 +78,44 @@ The application is primarily designed for students and early professionals (ages
 ---
 
 ## Project Structure
+```bash
 src/
 │
-├── components/              
-│   ├── ui/                  
-│   ├── common/              
-│   │   ├── Navbar.tsx
-│   │   ├── SuggestionCard.tsx
+├── components/
+│ ├── ui/ # shadcn/ui components
+│ ├── common/ # reusable components
+│ │ ├── Navbar.tsx
+│ │ ├── SuggestionCard.tsx
 │
-├── features/               
-│   ├── budget/
-│   │   ├── BudgetForm.tsx
-│   │   ├── BudgetChart.tsx
-│   │   ├── budgetUtils.ts
+├── features/
+│ ├── budget/
+│ │ ├── BudgetForm.tsx
+│ │ ├── BudgetChart.tsx
+│ │ ├── budgetUtils.ts
 │
-│   ├── tracker/
-│   │   ├── DailyTracker.tsx
-│   │   ├── trackerUtils.ts
+│ ├── tracker/
+│ │ ├── DailyTracker.tsx
+│ │ ├── trackerUtils.ts
 │
-│   ├── smartSavings/
-│   │   ├── SmartSavingSuggestions.tsx
-│   │   ├── suggestionEngine.ts   
+│ ├── smartSavings/
+│ │ ├── SmartSavingSuggestions.tsx
+│ │ ├── suggestionEngine.ts
 │
-│   ├── dashboard/
-│   │   ├── Dashboard.tsx
+│ ├── dashboard/
+│ │ ├── Dashboard.tsx
 │
-├── hooks/                   
-│   ├── useLocalStorage.ts
+├── hooks/
+│ ├── useLocalStorage.ts
 │
-├── services/                
-│   ├── aiServices.ts
+├── services/
+│ ├── aiServices.ts
 │
-├── utils/                 
-│   ├── format.ts
+├── utils/
+│ ├── format.ts
 │
-├── types/                  
-│   ├── budget.ts
-│   ├── suggestion.ts
+├── types/
+│ ├── budget.ts
+│ ├── suggestion.ts
 │
 ├── App.tsx
 ├── main.tsx
