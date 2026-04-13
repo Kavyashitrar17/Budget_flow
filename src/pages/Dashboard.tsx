@@ -61,7 +61,7 @@ const Dashboard = () => {
         )}
         
         <SavedPlans />
-        <SavedPlans />
+        
 
 {/* ✅ AI SMART INSIGHTS */}
 <div className="mt-8">

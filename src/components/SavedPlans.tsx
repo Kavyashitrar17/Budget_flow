@@ -20,7 +20,8 @@ const SavedPlans = () => {
   
   useEffect(() => {
     try {
-      const plans = JSON.parse(localStorage.getItem('budgetPlans') || '[]');
+      const stored = localStorage.getItem('budgetPlans');
+      const plans = stored ? JSON.parse(stored) : [];
       setSavedPlans(plans);
     } catch (error) {
       console.error('Error loading saved plans:', error);
